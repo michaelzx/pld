@@ -45,6 +45,7 @@ type ServerConfig struct {
 type LoggerConfig struct {
 	Dev     bool
 	FileLog string // 只有dev=false的时候，才有用
+	Router  bool
 }
 type DbConfig struct {
 	Host          string

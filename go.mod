@@ -17,4 +17,6 @@ require (
 	go.uber.org/zap v1.13.0
 	github.com/casbin/casbin/v2 v2.6.4
 	github.com/casbin/gorm-adapter/v2 v2.1.0
+	github.com/jimsmart/schema v0.0.4
+	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334
 )
