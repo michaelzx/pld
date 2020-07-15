@@ -40,7 +40,6 @@ func InitDB(appDbCfg *pld_config.DbConfig) *gorm.DB {
 		if appDbCfg.MaxOpenConns > 0 {
 			db.DB().SetMaxOpenConns(appDbCfg.MaxOpenConns)
 		}
-		pld_logger.Debug("appDbCfg.Debug", appDbCfg.Debug)
 		db.LogMode(appDbCfg.Debug)
 		return db
 	} else {
