@@ -27,6 +27,12 @@ type Action struct {
 func NewAction(method HttpMethod, path string, handlers ...gin.HandlerFunc) *Action {
 	return &Action{Method: method, Path: path, Handlers: handlers}
 }
+func NewActionGet(path string, handlers ...gin.HandlerFunc) *Action {
+	return &Action{Method: HttpGet, Path: path, Handlers: handlers}
+}
+func NewActionPost(path string, handlers ...gin.HandlerFunc) *Action {
+	return &Action{Method: HttpPost, Path: path, Handlers: handlers}
+}
 
 type Module struct {
 	Path        string
