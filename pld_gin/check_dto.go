@@ -12,6 +12,9 @@ import (
 
 func CheckDTO(c *gin.Context, reqPtr interface{}) {
 	langTag := GetLangTag(c)
+	if langTag == pld_lang.None {
+		langTag = pld_lang.Cn
+	}
 	if bindErr := c.ShouldBindJSON(reqPtr); bindErr != nil {
 		if vErrs, ok := bindErr.(validator.ValidationErrors); ok {
 			for _, vErr := range vErrs {
