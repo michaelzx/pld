@@ -121,7 +121,7 @@ func (g *Generator) getEntImports(fields []string) []string {
 	}
 	var imports []string
 	if hasAppTypes {
-		imports = append(imports, `"gitee.com/zx-io/paladin-go/pkg/types"`)
+		imports = append(imports, `"github.com/michaelzx/pld/pld_types"`)
 	}
 	if hasDecimal {
 		imports = append(imports, `"github.com/shopspring/decimal"`)
