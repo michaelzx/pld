@@ -75,12 +75,13 @@ func (s *Resolver) resolve(sqlTplStr string, queryParams interface{}) error {
 	tplParams := tplParamsRegexp.FindAllStringSubmatch(sqlStr, -1)
 	// 校验 tplParams 是否 都在params中
 	// 仅支持 Params 及 struct
-	if p, ok := queryParams.(map[string]interface{}); ok {
+	if p, ok := queryParams.(*map[string]interface{}); ok {
 		s.values = make([]interface{}, 0, len(tplParams))
+		pMap := *p
 		for _, tplParam := range tplParams {
 			full := tplParam[0]
 			short := tplParam[1]
-			v, exist := p[short]
+			v, exist := pMap[short]
 			if !exist {
 				panic(full + "：不在queryParams中")
 			}
