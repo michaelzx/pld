@@ -14,11 +14,11 @@ const (
 	RandomTypeAll   RandomType = 3 // 数字、大小写字母
 )
 
-func RandomNumStr(site int) string {
-	return string(randomStr(site, RandomTypeNum))
+func RandomNumStr(size int) string {
+	return string(randomStr(size, RandomTypeNum))
 }
-func RandomStr(site int, randomType RandomType) string {
-	return string(randomStr(site, randomType))
+func RandomStr(size int, randomType RandomType) string {
+	return string(randomStr(size, randomType))
 }
 
 // 随机字符串
