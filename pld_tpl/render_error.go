@@ -12,6 +12,9 @@ import (
 func Render404(gc *gin.Context, themeName string) {
 	RenderErr(gc, themeName, 404, "not found")
 }
+func Render400(gc *gin.Context, themeName, message string) {
+	RenderErr(gc, themeName, 400, message)
+}
 func Render500(gc *gin.Context, themeName, message string) {
 	RenderErr(gc, themeName, 500, message)
 }
