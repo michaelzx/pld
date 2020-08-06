@@ -1,6 +1,8 @@
 package pld_captcha
 
 import (
+	"encoding/json"
+	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
 	"image/color"
 	"strings"
@@ -71,4 +73,14 @@ func Verify(id, code string) bool {
 	// logger.Debug("验证码验证-系统中存的", storeCode)
 	// logger.Debug("验证码验证-用户输入的", code)
 	return strings.ToLower(code) == strings.ToLower(storeCode)
+}
+
+func DefaultHandler(gc *gin.Context) {
+	id, b64s, err := Generate()
+	body := map[string]interface{}{"code": 1, "data": b64s, "captchaId": id, "msg": "success"}
+	if err != nil {
+		body = map[string]interface{}{"code": 0, "msg": err.Error()}
+	}
+	gc.Header("Content-Type", "application/json; charset=utf-8")
+	json.NewEncoder(gc.Writer).Encode(body)
 }
