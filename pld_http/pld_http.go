@@ -16,11 +16,11 @@ func deleteIfExists(filePath string) error {
 	return nil
 }
 
-func DownloadFile(url string, localPath string) error {
+func DownloadFile(url string, tempPath, savePath string) error {
 	// ******************************************************
 	// 下载的临时文件名称
 	// ******************************************************
-	tmpFilePath := localPath + ".download" // 没下载成功之前，用download后缀作为临时文件
+	tmpFilePath := tempPath + ".download" // 没下载成功之前，用download后缀作为临时文件
 	// 如果临时文件已存在，则删除
 	err := deleteIfExists(tmpFilePath)
 	if err != nil {
@@ -68,7 +68,7 @@ func DownloadFile(url string, localPath string) error {
 	// ******************************************************
 	// 用临时文件替换正式文件
 	// ******************************************************
-	err = os.Rename(tmpFilePath, localPath)
+	err = os.Rename(tmpFilePath, savePath)
 	if err != nil {
 		return err
 	}
