@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 )
 
 // 如果文件有存在，则先删除
@@ -21,6 +22,8 @@ func DownloadFile(url string, tempPath, savePath string) error {
 	// 下载的临时文件名称
 	// ******************************************************
 	tmpFilePath := tempPath + ".download" // 没下载成功之前，用download后缀作为临时文件
+	tmpFileDirPath := filepath.Dir(tmpFilePath)
+	pld_fs.CreateIfNotExist(tmpFileDirPath)
 	// 如果临时文件已存在，则删除
 	err := deleteIfExists(tmpFilePath)
 	if err != nil {
