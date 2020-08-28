@@ -3,5 +3,5 @@ package pld_fs
 import "testing"
 
 func TestCopyDir(t *testing.T) {
-	CopyDir("/Users/michael/workspace/cirs/cirs-doc-keeper/test/A", "/Users/michael/workspace/cirs/cirs-doc-keeper/test/移动测试目录")
+	CopyDir("/Users/michael/workspace/cirs/cirs-doc-keeper/test-storage/disks/测试盘/test", "/Users/michael/workspace/cirs/cirs-doc-keeper/test-storage/disks/测试盘/新建文件夹")
 }
