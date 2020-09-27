@@ -27,7 +27,7 @@ func (ii *ImageItem) Draw(ggc *gg.Context) (endX, endY float64) {
 	if ii.Height == 0 {
 		imgResize = imaging.Resize(img, ii.Width, 0, imaging.Lanczos)
 	} else {
-		imgResize = imaging.Fill(img, ii.Width, ii.Width, imaging.Center, imaging.Lanczos)
+		imgResize = imaging.Fill(img, ii.Width, ii.Height, imaging.Center, imaging.Lanczos)
 	}
 	ggc.DrawImage(imgResize, int(ii.X), int(ii.Y))
 	endX = ii.X + float64(imgResize.Rect.Max.X)
