@@ -15,6 +15,7 @@ require (
 	github.com/go-playground/universal-translator v0.17.0
 	github.com/go-playground/validator/v10 v10.3.0
 	github.com/go-sql-driver/mysql v1.5.0
+	github.com/gofiber/fiber/v2 v2.0.6
 	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334
 	github.com/jimsmart/schema v0.0.4
 	github.com/jinzhu/gorm v1.9.14
