@@ -13,7 +13,6 @@ func (t Tag) String() string {
 }
 func TagFromString(s string) Tag {
 	lowerV := strings.ToLower(s)
-	lowerV = strings.ReplaceAll(lowerV, "-", "_")
 	for _, langTag := range Tags {
 		if lowerV == langTag.String() {
 			return langTag
