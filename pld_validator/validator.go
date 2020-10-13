@@ -20,9 +20,10 @@ var TransCn ut.Translator
 var TransEn ut.Translator
 
 type DefaultValidator struct {
-	uni      *ut.UniversalTranslator
-	once     sync.Once
-	validate *validator.Validate
+	uni       *ut.UniversalTranslator
+	once      sync.Once
+	validate  *validator.Validate
+	transList []func()
 }
 
 // ValidateStruct receives any kind of type, but only performed struct or pointer to struct type.
@@ -54,6 +55,16 @@ var (
 	uni *ut.UniversalTranslator
 )
 
+func (v *DefaultValidator) TransCn(tag string, registerTranslationsFunc validator.RegisterTranslationsFunc, translationFunc validator.TranslationFunc) {
+	v.transList = append(v.transList, func() {
+		_ = v.validate.RegisterTranslation(tag, TransCn, registerTranslationsFunc, translationFunc)
+	})
+}
+func (v *DefaultValidator) TransEn(tag string, registerTranslationsFunc validator.RegisterTranslationsFunc, translationFunc validator.TranslationFunc) {
+	v.transList = append(v.transList, func() {
+		_ = v.validate.RegisterTranslation(tag, TransEn, registerTranslationsFunc, translationFunc)
+	})
+}
 func (v *DefaultValidator) lazyinit() {
 	v.once.Do(func() {
 
@@ -99,6 +110,9 @@ func (v *DefaultValidator) lazyinit() {
 			return true
 		})
 		// 可以用以下方式来增加验证器自定义规则的翻译
+		for i, _ := range v.transList {
+			v.transList[i]()
+		}
 		_ = v.validate.RegisterTranslation("admin_password", TransCn, func(ut ut.Translator) error {
 			return ut.Add("admin_password", "{0} 必须包含数字和英文，长度在6~20!", true) // see universal-translator for details
 		}, func(ut ut.Translator, fe validator.FieldError) string {

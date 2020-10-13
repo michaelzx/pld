@@ -9,3 +9,6 @@ var validate *pld_validator.DefaultValidator
 func init() {
 	validate = &pld_validator.DefaultValidator{}
 }
+func Validator() *pld_validator.DefaultValidator {
+	return validate
+}
