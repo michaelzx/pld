@@ -20,6 +20,13 @@ func ParamInt64(c *fiber.Ctx, paramName string) int64 {
 	}
 	return i64
 }
+func ParamInt64Plus(c *fiber.Ctx, paramName string) int64 {
+	i64 := ParamInt64(c, paramName)
+	if i64 <= 0 {
+		panic(pld_errs.ParamsErr.Suffix(paramName + "，必须大于0"))
+	}
+	return i64
+}
 func ParamInt64Default(c *fiber.Ctx, paramName string, defaultValue int64) int64 {
 	str := c.Params(paramName)
 	if str == "" {
