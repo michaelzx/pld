@@ -9,6 +9,8 @@ import (
 const (
 	goString        = "string"
 	goTime          = "pld_types.Time"
+	goInt8          = "int8"
+	goInt16         = "int16"
 	goInt32         = "int32"
 	goInt64         = "int64"
 	goDecimal       = "decimal.Decimal"
@@ -17,6 +19,8 @@ const (
 	goByteArray     = "[]byte"
 	goNullString    = "*string"
 	goNullTime      = "*pld_types.Time"
+	goNullInt8      = "*int8"
+	goNullInt16     = "*int16"
 	goNullInt32     = "*int32"
 	goNullInt64     = "*int64"
 	goNullDecimal   = "*decimal.Decimal"
@@ -34,7 +38,18 @@ func SqlType2GoType(c *sql.ColumnType) string {
 			return goNullString
 		}
 		return goString
-	case "tinyint", "int", "smallint", "mediumint":
+
+	case "tinyint":
+		if nullable {
+			return goNullInt8
+		}
+		return goInt8
+	case "smallint":
+		if nullable {
+			return goNullInt16
+		}
+		return goInt16
+	case "mediumint", "int":
 		if nullable {
 			return goNullInt32
 		}
