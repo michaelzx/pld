@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	//syscall.Umask(0)
+	// syscall.Umask(0)
 }
 
 // 参考：https://github.com/dazhenghu/gueditor
