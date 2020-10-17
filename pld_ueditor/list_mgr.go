@@ -1,7 +1,6 @@
 package pld_ueditor
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -17,7 +16,6 @@ func NewListMgr(webRoot string, uploadDir string) *ListMgr {
 }
 
 func (lm *ListMgr) getFileList(start int, size int, allowTypes []string) (fileList *FileList) {
-	fmt.Println("allowTypes", allowTypes)
 	files := make([]FileItem, 0)
 
 	path := filepath.Join(lm.webRoot, lm.uploadDir)
@@ -30,7 +28,6 @@ func (lm *ListMgr) getFileList(start int, size int, allowTypes []string) (fileLi
 			Total: 0,
 		}
 	}
-	fmt.Println("files", files)
 	if size == 0 {
 		size = 20
 	}
@@ -78,12 +75,10 @@ func (lm *ListMgr) walkFiles(path string, allowFiles []string, files *[]FileItem
 					for _, allowItem := range allowFiles {
 						urlPath := next[len(lm.webRoot):]
 						if strings.ToLower(ext) == allowItem {
-							fmt.Println("fileName", fileName)
 							*files = append(*files, FileItem{
 								Url:   urlPath,
 								Mtime: info.ModTime().Unix(),
 							})
-							fmt.Println("files", files)
 							break
 						}
 					}
