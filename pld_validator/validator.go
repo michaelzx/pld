@@ -20,10 +20,11 @@ var TransCn ut.Translator
 var TransEn ut.Translator
 
 type DefaultValidator struct {
-	uni       *ut.UniversalTranslator
-	once      sync.Once
-	validate  *validator.Validate
-	transList []func()
+	uni            *ut.UniversalTranslator
+	once           sync.Once
+	validate       *validator.Validate
+	transList      []func()
+	validationList []func()
 }
 
 // ValidateStruct receives any kind of type, but only performed struct or pointer to struct type.
@@ -63,6 +64,11 @@ func (v *DefaultValidator) TransCn(tag string, registerTranslationsFunc validato
 func (v *DefaultValidator) TransEn(tag string, registerTranslationsFunc validator.RegisterTranslationsFunc, translationFunc validator.TranslationFunc) {
 	v.transList = append(v.transList, func() {
 		_ = v.validate.RegisterTranslation(tag, TransEn, registerTranslationsFunc, translationFunc)
+	})
+}
+func (v *DefaultValidator) RegisterValidation(tag string, fn validator.Func, callValidationEvenIfNull ...bool) {
+	v.validationList = append(v.validationList, func() {
+		_ = v.validate.RegisterValidation(tag, fn, callValidationEvenIfNull...)
 	})
 }
 func (v *DefaultValidator) lazyinit() {
@@ -109,6 +115,10 @@ func (v *DefaultValidator) lazyinit() {
 			}
 			return true
 		})
+		// 可以用以下方式来增加验证器自定义规则
+		for i, _ := range v.validationList {
+			v.validationList[i]()
+		}
 		// 可以用以下方式来增加验证器自定义规则的翻译
 		for i, _ := range v.transList {
 			v.transList[i]()
@@ -119,24 +129,24 @@ func (v *DefaultValidator) lazyinit() {
 			t, _ := ut.T("admin_password", fe.Field())
 			return t
 		})
-		_ = v.validate.RegisterValidation("dir_name", func(fl validator.FieldLevel) bool {
-			v := fl.Field().String()
-			if v == "" {
-				return true
-			}
-			rgx := regexp.MustCompile(`^[a-zA-Z0-9-_]+$`)
-			if !rgx.MatchString(v) {
-				return false
-			}
-			return true
-		})
-		// 可以用以下方式来增加验证器自定义规则的翻译
-		_ = v.validate.RegisterTranslation("dir_name", TransCn, func(ut ut.Translator) error {
-			return ut.Add("dir_name", "{0} 只能包含a-z,A-Z,0-9,-,_", true) // see universal-translator for details
-		}, func(ut ut.Translator, fe validator.FieldError) string {
-			t, _ := ut.T("dir_name", fe.Field())
-			return t
-		})
+		// _ = v.validate.RegisterValidation("dir_name", func(fl validator.FieldLevel) bool {
+		// 	v := fl.Field().String()
+		// 	if v == "" {
+		// 		return true
+		// 	}
+		// 	rgx := regexp.MustCompile(`^[a-zA-Z0-9-_]+$`)
+		// 	if !rgx.MatchString(v) {
+		// 		return false
+		// 	}
+		// 	return true
+		// })
+		// // 可以用以下方式来增加验证器自定义规则的翻译
+		// _ = v.validate.RegisterTranslation("dir_name", TransCn, func(ut ut.Translator) error {
+		// 	return ut.Add("dir_name", "{0} 只能包含a-z,A-Z,0-9,-,_", true) // see universal-translator for details
+		// }, func(ut ut.Translator, fe validator.FieldError) string {
+		// 	t, _ := ut.T("dir_name", fe.Field())
+		// 	return t
+		// })
 		_ = v.validate.RegisterValidation("int", func(fl validator.FieldLevel) bool {
 			p := fl.Param()
 			v := fl.Field().String()
