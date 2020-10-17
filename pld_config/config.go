@@ -59,6 +59,7 @@ type AppConfig struct {
 }
 type ServerConfig struct {
 	Port            int
+	BodyLimit       int // 单位：M
 	ShutDownWaitSec int
 	SnowflakeNode   int64
 }

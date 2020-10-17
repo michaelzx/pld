@@ -17,6 +17,8 @@ type UEditor struct {
 	config    *Config
 	webRoot   string
 	uploadDir string
+	uploader  *Uploader
+	listMgr   *ListMgr
 }
 
 func NewUEditor(webRoot, uploadDir string) (*UEditor, error) {
@@ -39,6 +41,8 @@ func NewUEditor(webRoot, uploadDir string) (*UEditor, error) {
 		config:    &cfg,
 		webRoot:   webRoot,
 		uploadDir: uploadDir,
+		uploader:  NewUploader(webRoot),
+		listMgr:   NewListMgr(webRoot, uploadDir),
 	}, nil
 }
 
