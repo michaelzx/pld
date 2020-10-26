@@ -69,10 +69,10 @@ func (p *PageVO) get(db *gorm.DB, sqlTpl string, params interface{}) error {
 		p.IsFirstPage = true
 		p.IsLastPage = true
 	} else {
-		switch p.PageNum {
-		case 1:
+		if p.PageNum == 1 {
 			p.IsFirstPage = true
-		case p.PageTotal:
+		}
+		if p.PageNum == p.PageTotal {
 			p.IsLastPage = true
 		}
 	}
