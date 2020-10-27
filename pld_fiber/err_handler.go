@@ -9,7 +9,7 @@ import (
 
 func ErrorHandler(ctx *fiber.Ctx, err error) error {
 	if err == nil {
-		return nil
+		return ctx.Next()
 	} else if e, ok := err.(*pld_errs.BadRequest); ok {
 		return ctx.Status(e.Status).JSON(e.BizErr)
 	} else if e, ok := err.(*pld_errs.Unauthorized); ok {
