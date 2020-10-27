@@ -8,8 +8,9 @@ import (
 )
 
 func ErrorHandler(ctx *fiber.Ctx, err error) error {
-	pld_logger.Debug("ErrorHandler", ctx, err)
-	if e, ok := err.(*pld_errs.BadRequest); ok {
+	if err == nil {
+		return nil
+	} else if e, ok := err.(*pld_errs.BadRequest); ok {
 		return ctx.Status(e.Status).JSON(e.BizErr)
 	} else if e, ok := err.(*pld_errs.Unauthorized); ok {
 		return ctx.Status(e.Status).JSON(e.BizErr)
