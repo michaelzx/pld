@@ -8,6 +8,7 @@ import (
 // Constants for return types of golang
 const (
 	goString        = "string"
+	goDate          = "pld_types.Date"
 	goTime          = "pld_types.Time"
 	goInt8          = "int8"
 	goInt16         = "int16"
@@ -18,6 +19,7 @@ const (
 	goJson          = "pld_types.JsonString"
 	goByteArray     = "[]byte"
 	goNullString    = "*string"
+	goNullDate      = "*pld_types.Date"
 	goNullTime      = "*pld_types.Time"
 	goNullInt8      = "*int8"
 	goNullInt16     = "*int16"
@@ -64,11 +66,16 @@ func SqlType2GoType(c *sql.ColumnType) string {
 			return goNullDecimal
 		}
 		return goDecimal
-	case "date", "datetime", "time", "timestamp":
+	case "datetime", "time", "timestamp":
 		if nullable {
 			return goNullTime
 		}
 		return goTime
+	case "date":
+		if nullable {
+			return goNullDate
+		}
+		return goDate
 	case "binary", "blob", "longblob", "mediumblob", "varbinary":
 		if nullable {
 			return goNullByteArray

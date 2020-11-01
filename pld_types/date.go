@@ -32,3 +32,6 @@ func (j Date) MarshalJSON() ([]byte, error) {
 	var stamp = fmt.Sprintf("\"%s\"", time.Time(j).Format(DefaultDateFormat))
 	return []byte(stamp), nil
 }
+func (j Date) StdTime() time.Time {
+	return time.Time(j)
+}
