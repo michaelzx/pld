@@ -11,14 +11,9 @@ import (
 	"strings"
 )
 
-func CheckDTO(c *fiber.Ctx, reqPtr interface{}) {
-	langTag := GetLangTag(c)
+func ValidateStruct(langTag pld_lang.Tag, reqPtr interface{}) {
 	if langTag == pld_lang.None {
 		langTag = pld_lang.Cn
-	}
-	parseErr := c.BodyParser(reqPtr)
-	if parseErr != nil {
-		panic(pld_errs.CommonBadRequest(parseErr.Error()))
 	}
 	bindErr := validate.ValidateStruct(reqPtr)
 	if bindErr != nil {
@@ -56,4 +51,21 @@ func CheckDTO(c *fiber.Ctx, reqPtr interface{}) {
 		// from here you can create your own error messages in whatever language you wish
 		return
 	}
+}
+
+func CheckDTO(c *fiber.Ctx, reqPtr interface{}) {
+	parseErr := c.BodyParser(reqPtr)
+	if parseErr != nil {
+		panic(pld_errs.CommonBadRequest(parseErr.Error()))
+	}
+	langTag := GetLangTag(c)
+	ValidateStruct(langTag, reqPtr)
+}
+func CheckQueries(c *fiber.Ctx, reqPtr interface{}) {
+	parseErr := c.QueryParser(reqPtr)
+	if parseErr != nil {
+		panic(pld_errs.CommonBadRequest(parseErr.Error()))
+	}
+	langTag := GetLangTag(c)
+	ValidateStruct(langTag, reqPtr)
 }
