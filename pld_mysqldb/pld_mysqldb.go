@@ -1,4 +1,4 @@
-package pld_db
+package pld_mysqldb
 
 import (
 	"fmt"
@@ -6,12 +6,13 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/michaelzx/pld/pld_config"
 	"github.com/michaelzx/pld/pld_logger"
+	"go.uber.org/zap"
 	"log"
 )
 
 var db *gorm.DB
 
-func InitDB(appDbCfg *pld_config.DbConfig) *gorm.DB {
+func Init(appDbCfg *pld_config.MysqlConfig) *gorm.DB {
 	// loc=Local,标识跟随系统
 	connStr := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true&loc=Local", // &charset=utf8
 		appDbCfg.Usr,
@@ -57,7 +58,7 @@ func GetDB() *gorm.DB {
 
 func CloseDB() {
 	if err := db.Close(); err != nil {
-		pld_logger.Error("close db err", err)
+		pld_logger.Error("close db err", zap.Error(err))
 	} else {
 		log.Println("db closed")
 	}

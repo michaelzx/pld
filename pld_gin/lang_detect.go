@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/michaelzx/pld/pld_lang"
 	"github.com/michaelzx/pld/pld_logger"
+	"go.uber.org/zap"
 	"net/http"
 	"strings"
 	"time"
@@ -82,7 +83,7 @@ func LangDetectMiddleware(defaultLangTag pld_lang.Tag, enableUrlPrefixDetect boo
 			maxAge := now.Add(time.Duration(365*24) * time.Hour)
 			CookieAdd(gc, LangCookieName, langTag.String(), int(maxAge.Unix()))
 		}
-		pld_logger.Debug("lang_detect", langTag)
+		pld_logger.Debug("lang_detect", zap.Any("langTag", langTag))
 		gc.Set(pld_lang.GinContextKey, langTag)
 		gc.Next()
 	}
