@@ -125,7 +125,7 @@ func (s *Resolver) resolve(sqlTplStr string, queryParams interface{}) error {
 				if idxNumber > tplParamsRv.Len()-1 {
 					return errors.New(full + "超出最大长度")
 				}
-				s.values = append(s.values, tplParamsRv.Index(idxNumber))
+				s.values = append(s.values, tplParamsRv.Index(idxNumber).Interface())
 			} else {
 				s.values = append(s.values, v)
 			}
