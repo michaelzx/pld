@@ -26,7 +26,7 @@ type TableMeta struct {
 }
 
 type Generator struct {
-	DbCfg               pld_config.DbConfig
+	DbCfg               pld_config.MysqlConfig
 	BasePackage         string
 	Tables              []string
 	OutDir              string
