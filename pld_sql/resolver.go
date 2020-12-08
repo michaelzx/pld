@@ -2,11 +2,12 @@ package pld_sql
 
 import (
 	"bytes"
-	"github.com/michaelzx/pld/pld_reflect"
 	"github.com/michaelzx/pld/pld_logger"
+	"github.com/michaelzx/pld/pld_reflect"
 	"github.com/pkg/errors"
 	"reflect"
 	"regexp"
+	"strconv"
 	"strings"
 	"text/template"
 )
@@ -70,8 +71,8 @@ func (s *Resolver) resolve(sqlTplStr string, queryParams interface{}) error {
 		return err
 	}
 	sqlStr := sql.String()
-	// 正则找出，模板分析出中所有的 #{xxxx}
-	tplParamsRegexp := regexp.MustCompile(`#{(?P<param>\w*)}`)
+	// 正则找出，模板分析出中所有的 #{xxxx[x]}
+	tplParamsRegexp := regexp.MustCompile(`#{(?P<param>(?P<name>\w*)(\[(?P<idx>\d+)])*)}`)
 	tplParams := tplParamsRegexp.FindAllStringSubmatch(sqlStr, -1)
 	// 校验 tplParams 是否 都在params中
 	// 仅支持 Params 及 struct
@@ -80,13 +81,26 @@ func (s *Resolver) resolve(sqlTplStr string, queryParams interface{}) error {
 		pMap := *p
 		for _, tplParam := range tplParams {
 			full := tplParam[0]
-			short := tplParam[1]
-			v, exist := pMap[short]
+			name := tplParam[2]
+			v, exist := pMap[name]
 			if !exist {
 				panic(full + "：不在queryParams中")
 			}
 			sqlStr = strings.Replace(sqlStr, full, "?", 1)
-			s.values = append(s.values, v)
+			idx := tplParam[4]
+			tplParamsRv := reflect.ValueOf(v)
+			if idx != "" && (tplParamsRv.Kind() == reflect.Slice || tplParamsRv.Kind() == reflect.Array) {
+				idxNumber, err := strconv.Atoi(idx)
+				if err != nil {
+					return err
+				}
+				if idxNumber > tplParamsRv.Len()-1 {
+					return errors.New(full + "超出最大长度")
+				}
+				s.values = append(s.values, tplParamsRv.Index(idxNumber))
+			} else {
+				s.values = append(s.values, v)
+			}
 		}
 	} else if pld_reflect.IsStruct(queryParams) {
 		rt := reflect.TypeOf(queryParams)
@@ -94,14 +108,27 @@ func (s *Resolver) resolve(sqlTplStr string, queryParams interface{}) error {
 		fim := pld_reflect.StructFieldIdxMap(rt)
 		for _, tplParam := range tplParams {
 			full := tplParam[0]
-			short := tplParam[1]
-			fi, exist := fim[short]
+			name := tplParam[2]
+			fi, exist := fim[name]
 			if !exist {
 				panic(full + "：不在queryParams中")
 			}
 			v := rve.Field(fi).Interface()
 			sqlStr = strings.Replace(sqlStr, full, "?", 1)
-			s.values = append(s.values, v)
+			idx := tplParam[4]
+			tplParamsRv := reflect.ValueOf(v)
+			if idx != "" && (tplParamsRv.Kind() == reflect.Slice || tplParamsRv.Kind() == reflect.Array) {
+				idxNumber, err := strconv.Atoi(idx)
+				if err != nil {
+					return err
+				}
+				if idxNumber > tplParamsRv.Len()-1 {
+					return errors.New(full + "超出最大长度")
+				}
+				s.values = append(s.values, tplParamsRv.Index(idxNumber))
+			} else {
+				s.values = append(s.values, v)
+			}
 		}
 	} else {
 		return errors.New("queryParams 仅支持 map 及 struct")

@@ -1,12 +1,12 @@
 package pld_logger
 
 import (
-	"cirs-sds-master-server/internal/configs"
+	"github.com/michaelzx/pld/pld_config"
 	"testing"
 )
 
 func TestInit(t *testing.T) {
-	Init(configs.LoggerConfig{Mode: "dev"})
+	Init(pld_config.LoggerConfig{Mode: "dev"})
 	Debug("xxxx")
 	Info("xxxx")
 	Warn("xxxx")

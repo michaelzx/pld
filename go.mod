@@ -8,7 +8,6 @@ require (
 	github.com/casbin/casbin/v2 v2.6.4
 	github.com/casbin/gorm-adapter/v2 v2.1.0
 	github.com/disintegration/imaging v1.6.2
-	github.com/fatih/color v1.9.0
 	github.com/fogleman/gg v1.3.0
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/locales v0.13.0
@@ -24,5 +23,6 @@ require (
 	github.com/pkg/errors v0.8.1
 	github.com/spf13/viper v1.7.1
 	github.com/tdewolff/minify/v2 v2.7.6
+	github.com/valyala/fasthttp v1.16.0
 	go.uber.org/zap v1.16.0
 )
