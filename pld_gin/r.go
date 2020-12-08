@@ -17,3 +17,5 @@ func RString(c *gin.Context, str string) {
 func RHtml(gc *gin.Context, htmlStr string) {
 	gc.Data(http.StatusOK, "text/html; charset=utf-8", []byte(htmlStr))
 }
+
+type Map map[string]interface{}
